@@ -1,6 +1,11 @@
 name: 'Create Infinity Engine mod package'
 author: AL|EN (alienquake@hotmail.com)
 description: 'GitHub Action (PowerShell-based) to create Infinity Engine mod package.'
+inputs:
+  type:
+    description: 'Package type'
+    required: false
+    default: 'iemod'
 outputs:
   PackageBaseName:
     description: 'BaseName of the generated package'
