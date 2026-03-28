@@ -19751,6 +19751,7 @@ function error(message, properties = {}) {
 // index.js
 import { fileURLToPath } from "url";
 import { dirname as dirname3 } from "path";
+import { inspect } from "util";
 var __filename = fileURLToPath(import.meta.url);
 var __dirname = dirname3(__filename);
 async function ExecutePowerShellScript() {
