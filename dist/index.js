@@ -3574,7 +3574,7 @@ var require_data_url = __commonJS({
 var require_webidl = __commonJS({
   "node_modules/undici/lib/web/fetch/webidl.js"(exports, module) {
     "use strict";
-    var { types, inspect } = __require("node:util");
+    var { types, inspect: inspect2 } = __require("node:util");
     var { markAsUncloneable } = __require("node:worker_threads");
     var { toUSVString } = require_util();
     var webidl = {};
@@ -3721,7 +3721,7 @@ var require_webidl = __commonJS({
         case "Symbol":
           return `Symbol(${V.description})`;
         case "Object":
-          return inspect(V);
+          return inspect2(V);
         case "String":
           return `"${V}"`;
         default:
@@ -19727,9 +19727,22 @@ var ExitCode;
   ExitCode2[ExitCode2["Success"] = 0] = "Success";
   ExitCode2[ExitCode2["Failure"] = 1] = "Failure";
 })(ExitCode || (ExitCode = {}));
+function getInput(name, options) {
+  const val = process.env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
+  if (options && options.required && !val) {
+    throw new Error(`Input required and not supplied: ${name}`);
+  }
+  if (options && options.trimWhitespace === false) {
+    return val;
+  }
+  return val.trim();
+}
 function setFailed(message) {
   process.exitCode = ExitCode.Failure;
   error(message);
+}
+function debug(message) {
+  issueCommand("debug", {}, message);
 }
 function error(message, properties = {}) {
   issueCommand("error", toCommandProperties(properties), message instanceof Error ? message.toString() : message);
@@ -19742,11 +19755,17 @@ var __filename = fileURLToPath(import.meta.url);
 var __dirname = dirname3(__filename);
 async function ExecutePowerShellScript() {
   try {
+    const inputs = {
+      type: getInput("type")
+    };
+    debug(`Inputs: ${inspect(inputs)}`);
     await exec(
       "pwsh",
       [
         `-File`,
-        `${__dirname}/CreateIEModZipPackage.ps1`
+        `${__dirname}/CreateIEModPackage.ps1`,
+        `-PackageType`,
+        inputs.type
       ]
     );
   } catch (error2) {
