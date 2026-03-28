@@ -8,11 +8,17 @@ const __dirname = dirname(__filename);
 
 async function ExecutePowerShellScript() {
     try {
+        // Fetch action inputs
+        const inputs = {
+            type: core.getInput("type")
+        };
+        core.debug(`Inputs: ${inspect(inputs)}`);
         // Execute PowerShell script
         await exec.exec(
             "pwsh", [
             `-File`,
-            `${__dirname}/CreateIEModZipPackage.ps1`
+            `${__dirname}/CreateIEModPackage.ps1`,
+            `-PackageType`, inputs.type
         ]);
     } catch (error) {
         core.setFailed(error.message);

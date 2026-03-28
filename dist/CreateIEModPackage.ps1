@@ -1,7 +1,7 @@
 # Copyright (c) 2019 AL|EN (alienquake@hotmail.com)
 param(
      [ValidateSet('iemod','zip')]
-     $Type
+     $PackageType
 )
 function Get-IEModVersion {
     param($Path)
@@ -17,7 +17,7 @@ function Get-IEModVersion {
     $dataVersion
 }
 
-Write-Host "Type: $Type"
+Write-Host "PackageType: $PackageType"
 
 $Token = $ENV:GITHUB_TOKEN
 $Base64Token = [System.Convert]::ToBase64String([char[]]$Token)
@@ -96,7 +96,7 @@ Write-Host "$tempDir/$outZip/$ModMainFolder"
 $regexAny = ".*", "*.bak", "*.iemod", "*.tmp", "*.temp", 'backup', 'Thumbs.db', 'ehthumbs.db', '__macosx', '$RECYCLE.BIN'
 $excludedAny = Get-ChildItem -Path $ModTopDirectory/$ModMainFolder -Recurse -Include $regexAny
 
-if ($Type -eq 'iemod') {
+if ($PackageType -eq 'iemod') {
     # create iemod package
     Copy-Item -Path $ModTopDirectory/$ModMainFolder/* -Destination $tempDir/$outIEMod/$ModMainFolder -Recurse -Exclude $regexAny | Out-Null
 
@@ -106,7 +106,7 @@ if ($Type -eq 'iemod') {
     7z a -tzip "$ModTopDirectory/$PackageBaseName.iemod" "$tempDir/$outIEMod/*"
 }
 
-if ($Type -eq 'zip') {
+if ($PackageType -eq 'zip') {
 
     # zip package
     Copy-Item -Path $ModTopDirectory/$ModMainFolder/* -Destination $tempDir/$outZip/$ModMainFolder -Recurse -Exclude $regexAny | Out-Null
