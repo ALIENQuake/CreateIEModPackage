@@ -1,6 +1,6 @@
 {
   "name": "createiemodpackage",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "GitHub Action (PowerShell-based) to create Infinity Engine mod package.",
   "main": "index.js",
   "type": "module",
