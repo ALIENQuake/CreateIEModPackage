@@ -1,24 +1,22 @@
-const { inspect } = require("util");
-const core = require("@actions/core");
-const exec = require("@actions/exec");
+import * as core from "@actions/core";
+import * as exec from "@actions/exec";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 async function ExecutePowerShellScript() {
     try {
-        // Fetch action inputs
-        const inputs = {
-            type: core.getInput("type")
-        };
-        core.debug(`Inputs: ${inspect(inputs)}`);
         // Execute PowerShell script
         await exec.exec(
             "pwsh", [
             `-File`,
-            `${__dirname}/CreateIEModPackage.ps1`,
-            `-Type`, inputs.type
+            `${__dirname}/CreateIEModZipPackage.ps1`
         ]);
     } catch (error) {
-        core.setFailed(error.type);
+        core.setFailed(error.message);
     }
 }
 
-ExecutePowerShellScript();
+await ExecutePowerShellScript();
